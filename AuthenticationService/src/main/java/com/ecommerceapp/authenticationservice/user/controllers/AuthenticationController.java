@@ -1,0 +1,45 @@
+package com.ecommerceapp.authenticationservice.user.controllers;
+
+
+import com.ecommerceapp.authenticationservice.user.dtos.LoginRequest;
+import com.ecommerceapp.authenticationservice.user.dtos.RegisterRequest;
+import com.ecommerceapp.authenticationservice.user.dtos.ResendVerificationCodeRequest;
+import com.ecommerceapp.authenticationservice.user.dtos.VerifyRequest;
+import com.ecommerceapp.authenticationservice.user.response.ApiResponse;
+import com.ecommerceapp.authenticationservice.user.response.LoginResponse;
+import com.ecommerceapp.authenticationservice.user.response.RegisterResponse;
+import com.ecommerceapp.authenticationservice.user.services.AuthenticationService;
+import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
+public class AuthenticationController {
+
+    private final AuthenticationService authService;
+
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse<RegisterResponse>> registerUser(
+            @RequestBody RegisterRequest request
+    ) {
+        return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PostMapping("/verifyUser")
+    public ResponseEntity<ApiResponse<String>> verifyUser(@RequestBody VerifyRequest request) {
+        return ResponseEntity.ok(authService.verifyUser(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/resendVerificationCode")
+    public ResponseEntity<ApiResponse<String>> resendVerificationCode(@RequestBody ResendVerificationCodeRequest request) throws MessagingException {
+        return ResponseEntity.ok(authService.resendVerificationCode(request));
+    }
+}

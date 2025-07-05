@@ -1,0 +1,29 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - e-commerce-net
+    restart: unless-stopped
+
+  mail-dev:
+    container_name: e_commerce_mail_dev
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+    networks:
+      - e-commerce-net
+
+networks:
+  e-commerce-net:
+    driver: bridge
+
+volumes:
+  postgres:
