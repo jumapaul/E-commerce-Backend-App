@@ -9,5 +9,18 @@ spring:
           uri: lb:http://AUTHENTICATION-SERVICE
           predicates:
             - Path=/api/v1/auth/**
+#          filters:
+#            - AuthenticationFilter
+
+        - id: product-catalog
+          uri: lb:http://PRODUCT-CATALOG
+          predicates:
+            - Path=/api/v1/products/**
+          filters:
+            - AuthenticationFilter
 server:
   port: 8222
+
+security:
+  jwt:
+    secret-key: ad8180ed7aebdbe4941e46dfafef1370e016bdcba06e438ff744bf858b31bbb346f94ec4f0c0b859f7443ac3da696fefd913ce4edb1018ec00382619c73f5f99

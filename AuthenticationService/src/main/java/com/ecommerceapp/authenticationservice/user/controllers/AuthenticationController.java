@@ -1,15 +1,13 @@
 package com.ecommerceapp.authenticationservice.user.controllers;
 
 
-import com.ecommerceapp.authenticationservice.user.dtos.LoginRequest;
-import com.ecommerceapp.authenticationservice.user.dtos.RegisterRequest;
-import com.ecommerceapp.authenticationservice.user.dtos.ResendVerificationCodeRequest;
-import com.ecommerceapp.authenticationservice.user.dtos.VerifyRequest;
+import com.ecommerceapp.authenticationservice.user.dtos.*;
 import com.ecommerceapp.authenticationservice.user.response.ApiResponse;
 import com.ecommerceapp.authenticationservice.user.response.LoginResponse;
 import com.ecommerceapp.authenticationservice.user.response.RegisterResponse;
 import com.ecommerceapp.authenticationservice.user.services.AuthenticationService;
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +21,8 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<RegisterResponse>> registerUser(
-            @RequestBody RegisterRequest request
-    ) {
+            @RequestBody @Valid RegisterRequest request
+    ) throws MessagingException {
         return ResponseEntity.ok(authService.register(request));
     }
 
@@ -41,5 +39,10 @@ public class AuthenticationController {
     @PostMapping("/resendVerificationCode")
     public ResponseEntity<ApiResponse<String>> resendVerificationCode(@RequestBody ResendVerificationCodeRequest request) throws MessagingException {
         return ResponseEntity.ok(authService.resendVerificationCode(request));
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<ApiResponse<String>> resetPassword(@RequestBody ResetPasswordRequest request) {
+        return ResponseEntity.ok(authService.resetPassword(request));
     }
 }

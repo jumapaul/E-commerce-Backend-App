@@ -3,20 +3,21 @@ package com.ecommerceapp.authenticationservice.user.service_impl;
 import com.ecommerceapp.authenticationservice.config.JwtService;
 import com.ecommerceapp.authenticationservice.config.email.EmailService;
 import com.ecommerceapp.authenticationservice.user.Role;
-import com.ecommerceapp.authenticationservice.user.dtos.ResendVerificationCodeRequest;
+import com.ecommerceapp.authenticationservice.user.dtos.*;
 import com.ecommerceapp.authenticationservice.user.entities.UserEntity;
 import com.ecommerceapp.authenticationservice.user.repository.UserRepository;
-import com.ecommerceapp.authenticationservice.user.dtos.LoginRequest;
-import com.ecommerceapp.authenticationservice.user.dtos.RegisterRequest;
-import com.ecommerceapp.authenticationservice.user.dtos.VerifyRequest;
 import com.ecommerceapp.authenticationservice.user.response.ApiResponse;
 import com.ecommerceapp.authenticationservice.user.response.LoginResponse;
 import com.ecommerceapp.authenticationservice.user.response.RegisterResponse;
 import com.ecommerceapp.authenticationservice.user.services.AuthenticationService;
+import com.ecommerceapp.authenticationservice.user.exception.ConflictException;
+import com.ecommerceapp.authenticationservice.user.exception.UnAuthorizedException;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,35 +38,31 @@ public class AuthServiceImpl implements AuthenticationService {
     private final EmailService emailService;
 
     @Override
-    public ApiResponse<RegisterResponse> register(RegisterRequest request) {
-        try {
-            var userExists = repository.findByEmail(request.email()).isPresent();
+    public ApiResponse<RegisterResponse> register(@Valid RegisterRequest request) throws MessagingException {
+        var userExists = repository.findByEmail(request.email()).isPresent();
 
-            if (userExists) return onConflict("User already exists");
+        if (userExists) throw new ConflictException("User already exists");
 
-            var user = UserEntity.builder()
-                    .username(request.username())
-                    .email(request.email())
-                    .password(passwordEncoder.encode(request.password()))
-                    .role(Role.USER)
-                    .isEnabled(false)
-                    .verificationCode(generateVerificationCode())
-                    .verificationCodeExpiresAt(LocalDateTime.now().plusMinutes(30))
-                    .build();
+        var user = UserEntity.builder()
+                .username(request.username())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .role(Role.USER)
+                .isEnabled(false)
+                .verificationCode(generateVerificationCode())
+                .verificationCodeExpiresAt(LocalDateTime.now().plusMinutes(30))
+                .build();
 
-            repository.save(user);
+        repository.save(user);
 
-            //send email
-            emailService.sendEmailVerificationCode(user.getEmail(), user.getVerificationCode());
+        //send email
+        emailService.sendEmailVerificationCode(user.getEmail(), user.getVerificationCode());
 
-            RegisterResponse response = new RegisterResponse(
-                    user.getUsername(), user.getEmail(), user.getRole().name(), user.getVerificationCode()
-            );
+        RegisterResponse response = new RegisterResponse(
+                user.getUsername(), user.getEmail(), user.getRole().name(), user.getVerificationCode()
+        );
 
-            return onSuccess("Registration successful", response);
-        } catch (Exception e) {
-            return onUnAuthorized(e.getMessage());
-        }
+        return onSuccess("Registration successful", response);
     }
 
     @Override
@@ -74,10 +71,10 @@ public class AuthServiceImpl implements AuthenticationService {
                 new EntityNotFoundException("User with email " + request.email() + " not found")
         );
 
-        if (user.isEnabled()) return onBadRequest("Account already verified");
+        if (user.isEnabled()) throw new ConflictException("Account already verified");
 
         if (user.getVerificationCodeExpiresAt().isBefore(LocalDateTime.now()))
-            return onBadRequest("Verification code has expired");
+            throw new BadCredentialsException("Verification code has expired");
 
         if (user.getVerificationCode().equals(request.verificationCode())) {
             user.setEnabled(true);
@@ -88,38 +85,34 @@ public class AuthServiceImpl implements AuthenticationService {
 
             return onSuccess("User successfully verified", null);
         } else {
-            return onBadRequest("Invalid verification code");
+            throw new BadCredentialsException("Invalid verification code");
         }
     }
 
     @Override
     public ApiResponse<LoginResponse> login(LoginRequest request) {
-        try {
-            var user = repository.findByEmail(request.email()).orElseThrow(() ->
-                    new EntityNotFoundException("User not found")
-            );
+        var user = repository.findByEmail(request.email()).orElseThrow(() ->
+                new EntityNotFoundException("User not found")
+        );
 
-            if (!user.isEnabled()) return onUnAuthorized("Email not verified");
+        if (!user.isEnabled()) throw new UnAuthorizedException("Email not verified");
 
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.email(),
-                            request.password()
-                    )
-            );
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.email(),
+                        request.password()
+                )
+        );
 
-            String token = jwtService.generateToken(user);
+        String token = jwtService.generateToken(user);
 
-            var loginResponse = new LoginResponse(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    token
-            );
-            return onSuccess("Login successful", loginResponse);
-        } catch (Exception e) {
-            return onUnAuthorized(e.getMessage());
-        }
+        var loginResponse = new LoginResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                token
+        );
+        return onSuccess("Login successful", loginResponse);
     }
 
     @Override
@@ -128,7 +121,7 @@ public class AuthServiceImpl implements AuthenticationService {
                 new EntityNotFoundException("User with email " + request.email() + " not found")
         );
 
-        if (user.isEnabled()) return onBadRequest("User already verified");
+        if (user.isEnabled()) throw new BadCredentialsException("User already verified");
 
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(30));
@@ -138,6 +131,24 @@ public class AuthServiceImpl implements AuthenticationService {
         //send email
         emailService.sendEmailVerificationCode(user.getEmail(), user.getVerificationCode());
         return onSuccess("Verification code sent successfully", user.getVerificationCode());
+    }
+
+    @Override
+    public ApiResponse<String> resetPassword(ResetPasswordRequest request) {
+        var user = repository.findByEmail(request.email()).orElseThrow(() ->
+                new EntityNotFoundException("User with " + request.email() + " not found")
+        );
+
+        var isPasswordValid = passwordEncoder.matches(request.initialPassword(), user.getPassword());
+
+        if (!isPasswordValid) {
+            throw new BadCredentialsException("Incorrect password");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+
+        repository.save(user);
+        return onSuccess("Password reset successful", null);
     }
 
     private String generateVerificationCode() {

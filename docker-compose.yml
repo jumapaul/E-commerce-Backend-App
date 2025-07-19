@@ -21,9 +21,23 @@ services:
     networks:
       - e-commerce-net
 
+  mongodb:
+    container_name: e-commerce-mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    volumes:
+      - mongo:/data
+    networks:
+      - e-commerce-net
+
 networks:
   e-commerce-net:
     driver: bridge
 
 volumes:
   postgres:
+  mongo:
