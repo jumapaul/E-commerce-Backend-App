@@ -34,6 +34,37 @@ services:
     networks:
       - e-commerce-net
 
+#  elasticsearch:
+#    container_name: elasticsearch
+#    image: elasticsearch:7.17.3
+#    environment:
+#      - discovery.type=single-node
+#    ports:
+#      - "9200:9200"
+#    networks:
+#      - e-commerce-net
+#
+#  logstash:
+#    container_name: logstash
+#    image: logstash:7.17.3
+#    ports:
+#      - "5044:5044"
+#    volumes:
+#      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+#    networks:
+#      - e-commerce-net
+#
+#  kibana:
+#    container_name: kibana
+#    image: kibana:7.17.3
+#    ports:
+#      - "5601:5601"
+#    environment:
+#      ELASTICSEARCH_HOST: http://elasticsearch:9200
+#
+#    networks:
+#      - e-commerce-net
+
 networks:
   e-commerce-net:
     driver: bridge

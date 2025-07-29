@@ -18,6 +18,13 @@ spring:
             - Path=/api/v1/products/**
           filters:
             - AuthenticationFilter
+
+        - id: shopping-cart-service
+          uri: lb:http://SHOPPING-CART-SERVICE
+          predicates:
+            - Path=/api/v1/cart/**
+          filters:
+            - AuthenticationFilter
 server:
   port: 8222
 

@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      username: mongo
+      password: mongo
+      host: localhost
+      port: 27017
+      database: shopping-cart
+      authentication-database: admin
+
+server:
+  port: 8030
+application:
+  config:
+    product-url: http://localhost:8020/api/v1/products

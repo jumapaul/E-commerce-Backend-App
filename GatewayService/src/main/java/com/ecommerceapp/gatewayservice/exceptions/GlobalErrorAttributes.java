@@ -24,7 +24,7 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
                 errorResponse.put("message", "Invalid token");
                 break;
             case BAD_REQUEST:
-                errorResponse.put("Message", "Bad request");
+                errorResponse.put("message", "No headers added");
                 break;
             default:
                 errorResponse.put("message", "Something went wrong");
