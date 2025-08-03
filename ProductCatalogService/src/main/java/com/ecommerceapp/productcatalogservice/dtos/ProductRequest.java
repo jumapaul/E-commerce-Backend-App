@@ -8,7 +8,6 @@ public record ProductRequest(
         @NotEmpty(message = "Product name is required")
         String productName,
         String productDescription,
-        @Positive(message = "Define available quantity")
         int availableQuantity,
         String itemImageUrl,
         @Positive(message = "Product price is required")

@@ -26,4 +26,40 @@ public class GlobalExceptionHandler {
                 null
         ), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException exception) {
+        return new ResponseEntity<>(new ApiResponse<>(
+                HttpStatus.FORBIDDEN.value(),
+                exception.getMessage(),
+                null
+        ), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(SecurityException.class)
+    ResponseEntity<Object> handleUnauthorizedException(SecurityException exception) {
+        return new ResponseEntity<>(new ApiResponse<>(
+                HttpStatus.UNAUTHORIZED.value(),
+                exception.getMessage(),
+                null
+        ), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    ResponseEntity<Object> handleInternalServerErrorException(RuntimeException exception) {
+        return new ResponseEntity<>(new ApiResponse<>(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                exception.getMessage(),
+                null
+        ), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    ResponseEntity<Object> handleServiceUnavailableException(ServiceUnavailableException exception) {
+        return new ResponseEntity<>(new ApiResponse<>(
+                HttpStatus.SERVICE_UNAVAILABLE.value(),
+                exception.getMessage(),
+                null
+        ), HttpStatus.SERVICE_UNAVAILABLE);
+    }
 }

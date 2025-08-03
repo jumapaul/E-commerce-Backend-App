@@ -25,6 +25,13 @@ spring:
             - Path=/api/v1/cart/**
           filters:
             - AuthenticationFilter
+
+        - id: order-service
+          uri: lb:http://ORDER-SERVICE
+          predicates:
+            - Path=/api/v1/order/**
+          filters:
+            - AuthenticationFilter
 server:
   port: 8222
 

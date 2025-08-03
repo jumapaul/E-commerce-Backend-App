@@ -12,4 +12,4 @@ server:
   port: 8030
 application:
   config:
-    product-url: http://localhost:8020/api/v1/products
+    product-url: http://localhost:8222/api/v1/products

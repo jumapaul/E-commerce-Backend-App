@@ -3,6 +3,7 @@ package com.ecommerceapp.shoppingcartservice.shoppingCart.productClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.Optional;
 
@@ -14,5 +15,7 @@ import java.util.Optional;
 public interface ProductClient {
 
     @GetMapping("/{productId}")
-    Optional<ProductResponse> getProductById(@PathVariable(name = "productId") String productId);
+    Optional<ProductResponse> getProductById(
+            @PathVariable(name = "productId") String productId,
+            @RequestHeader("Authorization") String authHeader);
 }

@@ -34,36 +34,61 @@ services:
     networks:
       - e-commerce-net
 
-#  elasticsearch:
-#    container_name: elasticsearch
-#    image: elasticsearch:7.17.3
-#    environment:
-#      - discovery.type=single-node
-#    ports:
-#      - "9200:9200"
-#    networks:
-#      - e-commerce-net
-#
-#  logstash:
-#    container_name: logstash
-#    image: logstash:7.17.3
-#    ports:
-#      - "5044:5044"
-#    volumes:
-#      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-#    networks:
-#      - e-commerce-net
-#
-#  kibana:
-#    container_name: kibana
-#    image: kibana:7.17.3
-#    ports:
-#      - "5601:5601"
-#    environment:
-#      ELASTICSEARCH_HOST: http://elasticsearch:9200
-#
-#    networks:
-#      - e-commerce-net
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - e-commerce-net
+
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:7.15.2
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+
+     #mount all service logs
+      - ./AuthenticationService/logs:/usr/share/logstash/auth_service
+      - ./GatewayService/logs:/usr/share/logstash/gateway_service
+      - ./ProductCatalogService/logs:/usr/share/logstash/product_service
+      - ./ShoppingCartService/logs:/usr/share/logstash/shopping_cart_service
+      - ./OrderService/logs:/usr/share/logstash/order_service
+
+    ports:
+      - "5044:5044"
+    environment:
+      - 'LS_JAVA_OPTS=-Xmx256m -Xms256m'
+    networks:
+      - e-commerce-net
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.15.2
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - 'NODE_OPTIONS=--max-old-space-size=2048'
+
+    networks:
+      - e-commerce-net
+    depends_on:
+      - elasticsearch
 
 networks:
   e-commerce-net:
@@ -72,3 +97,4 @@ networks:
 volumes:
   postgres:
   mongo:
+  es-data:

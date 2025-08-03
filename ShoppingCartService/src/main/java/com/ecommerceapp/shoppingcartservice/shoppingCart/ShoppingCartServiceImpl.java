@@ -22,7 +22,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartMapper mapper;
 
     @Override
-    public ApiResponse<Cart> addProductToCart(CartItem request, Long userId) {
+    public ApiResponse<Cart> addProductToCart(CartItem request, Long userId, String authHeader) {
 
         Cart cart = repository.findById(userId).orElseGet(() ->
                 createNewCart(userId)
@@ -31,7 +31,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         Optional<CartItem> cartItem = cart.getCartItems().stream().filter(item ->
                 item.getProductId().equals(request.getProductId())).findFirst();
 
-        ProductResponse product = productClient.getProductById(request.getProductId()).orElseThrow(() ->
+        ProductResponse product = productClient.getProductById(request.getProductId(), authHeader).orElseThrow(() ->
                 new ResourceNotFoundException("Item with id " + request.getProductId() + "not found")
         );
 
@@ -103,6 +103,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 "Item removed successfully",
                 cart
         );
+    }
+
+    @Override
+    public ApiResponse<String> deleteCart(Long userId) {
+        repository.deleteById(userId);
+        return null;
     }
 
     private Cart createNewCart(Long userId) {

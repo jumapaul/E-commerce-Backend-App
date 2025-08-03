@@ -14,8 +14,12 @@ public class ShoppingCartController {
     private final ShoppingCartService service;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<ApiResponse<Cart>> addToCart(@RequestBody CartItem cartItem, @PathVariable Long userId) {
-        return ResponseEntity.ok(service.addProductToCart(cartItem, userId));
+    public ResponseEntity<ApiResponse<Cart>> addToCart(
+            @RequestBody CartItem cartItem,
+            @PathVariable Long userId,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        return ResponseEntity.ok(service.addProductToCart(cartItem, userId, authHeader));
     }
 
     @GetMapping("{userId}")
@@ -29,5 +33,12 @@ public class ShoppingCartController {
             @PathVariable String itemId
     ) {
         return ResponseEntity.ok(service.removeFromCart(userId, itemId));
+    }
+
+    @DeleteMapping("delete/{userId}")
+    public ResponseEntity<ApiResponse<String>> deleteCart(
+            @PathVariable(name = "userId") Long userId
+    ) {
+        return ResponseEntity.ok(service.deleteCart(userId));
     }
 }
