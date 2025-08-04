@@ -13,4 +13,6 @@ public interface OrderService {
     ApiResponse<List<Order>> getUserOrderBasedOnStatus(Long userId, String status);
 
     ApiResponse<List<Order>> getOrdersBasedOnStatus(String status);
+
+    Order findOrderById(String orderId);
 }

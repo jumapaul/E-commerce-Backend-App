@@ -98,6 +98,13 @@ public class OrderServiceImpl implements OrderService {
         );
     }
 
+    @Override
+    public Order findOrderById(String orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() ->
+                new ResourceNotFoundException("Order with id " + orderId + " not found")
+        );
+    }
+
     private void updateProductInventory(ShoppingCartResponse cartResponse, String authHeader) {
         List<CompletableFuture<Void>> updateFutures = cartResponse.cartItems().stream()
                 .map(cartItem -> CompletableFuture.runAsync(() -> updateSingleProductInventory(cartItem, authHeader)))

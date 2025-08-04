@@ -26,7 +26,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
-    @GetMapping("update/{orderId}")
+    @GetMapping("/update/{orderId}")
     public ResponseEntity<Order> updateOrderStatus(
             @PathVariable(name = "orderId") String orderId,
             @RequestParam(name = "status") String status
@@ -34,7 +34,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, status));
     }
 
-    @GetMapping("status/{userId}")
+    @GetMapping("/status/{userId}")
     public ResponseEntity<ApiResponse<List<Order>>> getUserOrderBasedOnStatus(
             @PathVariable(name = "userId") Long userId,
             @RequestParam(name = "status") String status
@@ -47,5 +47,10 @@ public class OrderController {
             @RequestParam(name = "status") String status
     ) {
         return ResponseEntity.ok(orderService.getOrdersBasedOnStatus(status));
+    }
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<Order> getOrderById(@PathVariable(name = "orderId") String orderId) {
+        return ResponseEntity.ok(orderService.findOrderById(orderId));
     }
 }
