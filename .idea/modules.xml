@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AuthenticationService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/AuthenticationService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ChatService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ChatService.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/E-commerce-app.iml" filepath="$PROJECT_DIR$/.idea/E-commerce-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/NotificationService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/NotificationService.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/OrderService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/OrderService.main.iml" />

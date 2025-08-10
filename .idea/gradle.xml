@@ -12,6 +12,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/ChatService" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/ChatService" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/ConfigServer" />
         <option name="modules">
           <set>
