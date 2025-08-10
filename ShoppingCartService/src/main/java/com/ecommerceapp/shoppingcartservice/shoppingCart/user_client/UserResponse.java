@@ -1,4 +1,4 @@
-package com.ecommerceapp.authenticationservice.user.dtos;
+package com.ecommerceapp.shoppingcartservice.shoppingCart.user_client;
 
 public record UserResponse(
         String username,

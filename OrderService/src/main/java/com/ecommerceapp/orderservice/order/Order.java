@@ -21,6 +21,8 @@ public class Order {
     private String id;
     private Status status;
     private Long userId;
+    private String userEmail;
+    private String username;
     private BigDecimal totalPrice;
     private List<CartItem> cartItems;
 }

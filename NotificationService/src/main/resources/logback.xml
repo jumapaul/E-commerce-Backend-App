@@ -3,14 +3,14 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <appender name="LOGSTASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>AuthenticationService/logs/auth_service.log</file>
+        <file>NotificationService/logs/notification_service.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/auth_service_logs-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/notification_service_logs-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>1</maxHistory>
         </rollingPolicy>
 
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <customFields>{"service":"auth-service","version":"1.0.0"}</customFields>
+            <customFields>{"service":"notification-service","version":"1.0.0"}</customFields>
         </encoder>
     </appender>
 

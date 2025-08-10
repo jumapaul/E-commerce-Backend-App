@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
+<div style="max-width: 600px; margin: auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <h2 style="color: #2c3e50;">Thank you for your order!</h2>
+
+    <p><strong>Order ID:</strong> <span th:text="${orderId}">ORDER_ID</span></p>
+    <p><strong>Status:</strong> <span th:text="${status}">STATUS</span></p>
+    <p><strong>Total Price:</strong> $<span th:text="${totalPrice}">0.00</span></p>
+
+    <h3 style="margin-top: 30px; color: #2c3e50;">Order Summary</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+        <tr style="background-color: #f0f0f0;">
+            <th style="padding: 10px; text-align: left;">Item</th>
+            <th style="padding: 10px; text-align: right;">Quantity</th>
+            <th style="padding: 10px; text-align: right;">Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;" th:text="${item.productName}">Item Name</td>
+            <td style="padding: 10px; text-align: right; border-bottom: 1px solid #ddd;" th:text="${item.quantity}">1</td>
+            <td style="padding: 10px; text-align: right; border-bottom: 1px solid #ddd;">$<span th:text="${item.unitPrice}">10.00</span></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top: 30px;">If you have any questions about your order, feel free to contact our support team.</p>
+</div>
+</body>
+</html>

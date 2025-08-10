@@ -1,6 +1,4 @@
-package com.ecommerceapp.orderservice.order;
-
-import com.ecommerceapp.orderservice.cart_client.CartItem;
+package com.ecommerceapp.notificationservice.notification.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,6 +8,6 @@ public record OrderConfirmation(
         Status status,
         String userEmail,
         BigDecimal totalPrice,
-        List<CartItem>cartItems
+        List<CartItem> cartItems
 ) {
 }

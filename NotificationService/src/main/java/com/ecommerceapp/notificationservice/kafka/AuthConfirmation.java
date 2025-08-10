@@ -1,4 +1,4 @@
-package com.ecommerceapp.authenticationservice.kafka;
+package com.ecommerceapp.notificationservice.kafka;
 
 public record AuthConfirmation(
         String email,

@@ -4,6 +4,8 @@ import com.ecommerceapp.shoppingcartservice.shoppingCart.cart.*;
 import com.ecommerceapp.shoppingcartservice.shoppingCart.exception.ResourceNotFoundException;
 import com.ecommerceapp.shoppingcartservice.shoppingCart.productClient.ProductClient;
 import com.ecommerceapp.shoppingcartservice.shoppingCart.productClient.ProductResponse;
+import com.ecommerceapp.shoppingcartservice.shoppingCart.user_client.UserClient;
+import com.ecommerceapp.shoppingcartservice.shoppingCart.user_client.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import java.util.Optional;
 @Slf4j
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ProductClient productClient;
+    private final UserClient userClient;
     private final ShoppingCartRepository repository;
     private final CartMapper mapper;
 
@@ -25,7 +28,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ApiResponse<Cart> addProductToCart(CartItem request, Long userId, String authHeader) {
 
         Cart cart = repository.findById(userId).orElseGet(() ->
-                createNewCart(userId)
+                createNewCart(userId, authHeader)
         );
 
         Optional<CartItem> cartItem = cart.getCartItems().stream().filter(item ->
@@ -111,9 +114,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return null;
     }
 
-    private Cart createNewCart(Long userId) {
+    private Cart createNewCart(Long userId, String authHeader) {
+        ApiResponse<UserResponse> user = userClient.getUserById(userId, authHeader).orElseThrow(() ->
+                new ResourceNotFoundException("User with id " + userId + " not found")
+        );
         Cart newCart = Cart.builder()
                 .userId(userId)
+                .username(user.getData().username())
+                .userEmail(user.getData().email())
                 .totalPrice(BigDecimal.ZERO)
                 .cartItems(new ArrayList<>())
                 .build();
