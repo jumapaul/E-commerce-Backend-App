@@ -24,7 +24,6 @@ This repository contains the backend implementation for a scalable ecommerce app
 
 ## Tech Stack
 - **Java**: Java runtime for building scalable network applications.
-- **Express.js**: Web application framework for Node.js. #Pending
 - **Docker**: Containerization platform for packaging applications.
 - **MongoDB**: NoSQL database for data storage.
 - **PostgreSQL**: Sql database for data storage.
