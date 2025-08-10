@@ -66,6 +66,8 @@ services:
       - ./ProductCatalogService/logs:/usr/share/logstash/product_service
       - ./ShoppingCartService/logs:/usr/share/logstash/shopping_cart_service
       - ./OrderService/logs:/usr/share/logstash/order_service
+      - ./NotificationService/logs:/usr/share/logstash/notification_service
+      - ./ChatService/logs:/usr/share/logstash/chat_service
 
     ports:
       - "5044:5044"

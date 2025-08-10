@@ -1,4 +1,4 @@
-package com.ecommerceapp.orderservice.cart_client;
+package com.ecommerceapp.notificationservice.notification.dto;
 
 import java.math.BigDecimal;
 

@@ -12,6 +12,11 @@ spring:
 #          filters:
 #            - AuthenticationFilter
 
+        - id: auth-service-user
+          uri: lb:http://AUTHENTICATION-SERVICE
+          predicates:
+            - Path=/api/v1/user/**
+
         - id: product-catalog
           uri: lb:http://PRODUCT-CATALOG
           predicates:
@@ -32,6 +37,11 @@ spring:
             - Path=/api/v1/order/**
           filters:
             - AuthenticationFilter
+
+        - id: chat-service
+          uri: lb:http://CHAT-SERVICE
+          predicates:
+            - Path=/api/v1/chat/**
 server:
   port: 8222
 

@@ -1,4 +1,4 @@
-package com.ecommerceapp.authenticationservice.user.response;
+package com.ecommerceapp.notificationservice.notification.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

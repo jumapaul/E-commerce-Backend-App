@@ -12,6 +12,8 @@ public class OrderMapper {
         return Order.builder()
                 .status(Status.PENDING)
                 .userId(response.userId())
+                .userEmail(response.userEmail())
+                .username(response.username())
                 .totalPrice(response.totalPrice())
                 .cartItems(response.cartItems())
                 .build();

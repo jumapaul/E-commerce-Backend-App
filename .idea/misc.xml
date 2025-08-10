@@ -6,6 +6,8 @@
     <file type="web" url="file://$PROJECT_DIR$/ConfigServer" />
     <file type="web" url="file://$PROJECT_DIR$/EurekaDiscoveryService" />
     <file type="web" url="file://$PROJECT_DIR$/GatewayService" />
+    <file type="web" url="file://$PROJECT_DIR$/NotificationService" />
+    <file type="web" url="file://$PROJECT_DIR$/OrderService" />
     <file type="web" url="file://$PROJECT_DIR$/ProductCatalogService" />
     <file type="web" url="file://$PROJECT_DIR$/ShoppingCartService" />
   </component>

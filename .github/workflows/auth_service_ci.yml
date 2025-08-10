@@ -1,0 +1,48 @@
+name: Build and test Authentication service
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'AuthenticationService/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'AuthenticationService/**'
+
+env:
+  GIT_SHA: ${{ github.sha }}
+
+jobs:
+  build:
+    name: Build and test authentication service
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: AuthenticationService
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/checkout@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build and run test
+        run: ./gradlew clean build test
+
+      - name: Log in to docker hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build docker image
+        run: docker build -t AuthService:$GIT_SHA .
+
+      - name: Push Docker image
+        run: docker push AuthService:$GIT_SHA

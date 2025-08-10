@@ -4,6 +4,7 @@ import com.ecommerceapp.orderservice.cart_client.CartItem;
 import com.ecommerceapp.orderservice.cart_client.ShoppingCartClient;
 import com.ecommerceapp.orderservice.cart_client.ShoppingCartResponse;
 import com.ecommerceapp.orderservice.exception.ResourceNotFoundException;
+import com.ecommerceapp.orderservice.kafka.OrderProducer;
 import com.ecommerceapp.orderservice.mapper.OrderMapper;
 import com.ecommerceapp.orderservice.product_client.Product;
 import com.ecommerceapp.orderservice.product_client.ProductClient;
@@ -28,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductClient productClient;
     private final OrderMapper mapper;
     private final OrderRepository orderRepository;
+    private final OrderProducer orderProducer;
 
     @Override
     public Order makeOrder(Long userId, String authHeader) {
@@ -38,13 +40,17 @@ public class OrderServiceImpl implements OrderService {
 
         // make payment - ignore for now
 
-        Order order = mapper.fromCart(cart.getData());
-        orderRepository.save(order);
+        Order order = orderRepository.save(mapper.fromCart(cart.getData()));
 
+        orderProducer.sendOrderConfirmation(new OrderConfirmation(
+                order.getId(),
+                order.getStatus(),
+                order.getUserEmail(),
+                order.getTotalPrice(),
+                order.getCartItems()
+        ));
         updateProductInventory(cart.getData(), authHeader);
-
         deleteCart(userId, authHeader);
-        //Send notification - ignore for now
 
         return order;
     }

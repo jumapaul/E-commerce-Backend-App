@@ -3,10 +3,12 @@ package com.ecommerceapp.shoppingcartservice.shoppingCart.productClient;
 import com.ecommerceapp.shoppingcartservice.shoppingCart.exception.AccessDeniedException;
 import com.ecommerceapp.shoppingcartservice.shoppingCart.exception.ResourceNotFoundException;
 import feign.Response;
+import feign.RetryableException;
 import feign.codec.ErrorDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -27,8 +29,8 @@ public class CustomFeignDecoder implements ErrorDecoder {
             case FORBIDDEN -> new AccessDeniedException("Access forbidden");
             case NOT_FOUND -> new ResourceNotFoundException("Resource not found");
             case INTERNAL_SERVER_ERROR -> new RuntimeException("Internal server error");
-//            case SERVICE_UNAVAILABLE:
-//                return new RetryableException(response.status(), "Service unavailable", null, null, null);
+            case SERVICE_UNAVAILABLE ->
+                    new RetryableException(response.status(), "Service unavailable", response.request().httpMethod(), (Long) null, response.request());
             default -> new Exception("Unexpected error: " + responseBody);
         };
     }
