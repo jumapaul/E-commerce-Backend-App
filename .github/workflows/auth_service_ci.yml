@@ -2,7 +2,7 @@ name: Build and test Authentication service
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - 'AuthenticationService/**'
 #  pull_request:

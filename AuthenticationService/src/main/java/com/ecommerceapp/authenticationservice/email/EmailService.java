@@ -32,7 +32,7 @@ public class EmailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, UTF_8.name());
 
-        messageHelper.setFrom("noreply@gmail.com"); //Email to be displayed when the sent
+        messageHelper.setFrom("noreply@gmail.com");
         final String templateName = VERIFICATION_CODE.getTemplate();
 
         Map<String, Object> variables = new HashMap<>();
