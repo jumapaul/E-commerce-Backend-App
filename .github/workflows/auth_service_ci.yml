@@ -5,10 +5,10 @@ on:
     branches: [main]
     paths:
       - 'AuthenticationService/**'
-  pull_request:
-    branches: [main]
-    paths:
-      - 'AuthenticationService/**'
+#  pull_request:
+#    branches: [main]
+#    paths:
+#      - 'AuthenticationService/**'
 
 env:
   GIT_SHA: ${{ github.sha }}
