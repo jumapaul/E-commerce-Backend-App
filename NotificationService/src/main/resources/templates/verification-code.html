@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Email Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9fafb;
+            color: #333333;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1d4ed8;
+            letter-spacing: 4px;
+            margin: 20px 0;
+        }
+        .footer {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Email Verification</h2>
+    <p>Hello,</p>
+    <p>Thank you for signing up. Please use the verification code below to verify your email address:</p>
+
+    <div class="code" th:text="${verificationCode}"></div>
+
+    <p>This code will expire in 30 minutes. If you didn’t request this, you can safely ignore this email.</p>
+
+    <p>Thanks,<br>Your Company Team</p>
+
+    <div class="footer">
+        &copy; 2025 Your Company. All rights reserved.
+    </div>
+</div>
+</body>
+</html>
