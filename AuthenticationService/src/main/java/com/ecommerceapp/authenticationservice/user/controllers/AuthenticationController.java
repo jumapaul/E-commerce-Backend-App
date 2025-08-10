@@ -2,6 +2,7 @@ package com.ecommerceapp.authenticationservice.user.controllers;
 
 
 import com.ecommerceapp.authenticationservice.user.dtos.*;
+import com.ecommerceapp.authenticationservice.user.entities.UserEntity;
 import com.ecommerceapp.authenticationservice.user.response.ApiResponse;
 import com.ecommerceapp.authenticationservice.user.response.LoginResponse;
 import com.ecommerceapp.authenticationservice.user.response.RegisterResponse;
