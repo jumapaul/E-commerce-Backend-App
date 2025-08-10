@@ -1,8 +1,9 @@
-package com.ecommerceapp.authenticationservice.config.email;
+package com.ecommerceapp.notificationservice.email;
 
 import lombok.Getter;
 
-public enum EmailTemplates {
+public enum EmailTemplate {
+    ORDER_CONFIRMATION_EMAIL("order-confirmation-mail.html", "Order Confirmation"),
     VERIFICATION_CODE("verification-code.html", "Email verification code send");
 
     @Getter
@@ -11,7 +12,7 @@ public enum EmailTemplates {
     @Getter
     private final String subject;
 
-    EmailTemplates(String template, String subject) {
+    EmailTemplate(String template, String subject) {
         this.template = template;
         this.subject = subject;
     }

@@ -1,8 +1,7 @@
-package com.ecommerceapp.authenticationservice.user.exception;
+package com.ecommerceapp.authenticationservice.exception;
 
 import com.ecommerceapp.authenticationservice.user.response.ApiResponse;
 import jakarta.mail.MessagingException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.ForbiddenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +22,8 @@ public class GlobalExceptionHandler {
         ), HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
         return new ResponseEntity<>(new ApiResponse<>(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),
@@ -83,8 +82,8 @@ public class GlobalExceptionHandler {
         ), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGenericException(Exception exception) {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleGenericException(RuntimeException exception) {
         return new ResponseEntity<>(new ApiResponse<>(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 exception.getMessage(),

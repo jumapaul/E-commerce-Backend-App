@@ -14,4 +14,6 @@ public interface AuthenticationService {
     ApiResponse<String> resendVerificationCode(ResendVerificationCodeRequest email) throws MessagingException;
 
     ApiResponse<String> resetPassword(ResetPasswordRequest request);
+
+    ApiResponse<UserResponse> getUserById(Long userId);
 }

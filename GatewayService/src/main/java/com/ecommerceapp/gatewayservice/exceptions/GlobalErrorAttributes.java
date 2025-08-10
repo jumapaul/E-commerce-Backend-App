@@ -26,12 +26,14 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
             case BAD_REQUEST:
                 errorResponse.put("message", "No headers added");
                 break;
-
+            case FORBIDDEN:
+                errorResponse.put("message", "Forbidden request");
+                break;
             case SERVICE_UNAVAILABLE:
                 errorResponse.put("message", "Service not available");
                 break;
             case NOT_FOUND:
-                errorResponse.put("message", "Here");
+                errorResponse.put("message", "Not found");
                 break;
             default:
                 errorResponse.put("message", "Something went wrong");

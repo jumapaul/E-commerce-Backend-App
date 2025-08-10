@@ -1,4 +1,4 @@
-package com.ecommerceapp.authenticationservice.config.email;
+package com.ecommerceapp.authenticationservice.email;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -13,7 +13,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ecommerceapp.authenticationservice.config.email.EmailTemplates.VERIFICATION_CODE;
+import static com.ecommerceapp.authenticationservice.email.EmailTemplates.VERIFICATION_CODE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Service

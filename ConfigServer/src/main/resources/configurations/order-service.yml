@@ -8,6 +8,10 @@ spring:
       database: orders
       authentication-database: admin
 
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+
 server:
   port: 8040
 

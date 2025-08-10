@@ -1,21 +1,24 @@
 package com.ecommerceapp.authenticationservice.user.service_impl;
 
 import com.ecommerceapp.authenticationservice.config.JwtService;
-import com.ecommerceapp.authenticationservice.config.email.EmailService;
+import com.ecommerceapp.authenticationservice.kafka.AuthConfirmation;
+import com.ecommerceapp.authenticationservice.kafka.producer.AuthProducer;
 import com.ecommerceapp.authenticationservice.user.Role;
 import com.ecommerceapp.authenticationservice.user.dtos.*;
 import com.ecommerceapp.authenticationservice.user.entities.UserEntity;
+import com.ecommerceapp.authenticationservice.exception.ResourceNotFoundException;
 import com.ecommerceapp.authenticationservice.user.repository.UserRepository;
 import com.ecommerceapp.authenticationservice.user.response.ApiResponse;
 import com.ecommerceapp.authenticationservice.user.response.LoginResponse;
 import com.ecommerceapp.authenticationservice.user.response.RegisterResponse;
 import com.ecommerceapp.authenticationservice.user.services.AuthenticationService;
-import com.ecommerceapp.authenticationservice.user.exception.ConflictException;
-import com.ecommerceapp.authenticationservice.user.exception.UnAuthorizedException;
+import com.ecommerceapp.authenticationservice.exception.ConflictException;
+import com.ecommerceapp.authenticationservice.exception.UnAuthorizedException;
 import jakarta.mail.MessagingException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +30,7 @@ import java.util.Random;
 
 import static com.ecommerceapp.authenticationservice.util.ManageResponse.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthenticationService {
@@ -35,7 +39,7 @@ public class AuthServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final EmailService emailService;
+    private final AuthProducer authProducer;
 
     @Override
     public ApiResponse<RegisterResponse> register(@Valid RegisterRequest request) throws MessagingException {
@@ -55,8 +59,11 @@ public class AuthServiceImpl implements AuthenticationService {
 
         repository.save(user);
 
-        //send email
-        emailService.sendEmailVerificationCode(user.getEmail(), user.getVerificationCode());
+        AuthConfirmation authConfirmation = new AuthConfirmation(
+                user.getEmail(), user.getVerificationCode()
+        );
+        //send to producer
+        authProducer.sendVerificationCode(authConfirmation);
 
         RegisterResponse response = new RegisterResponse(
                 user.getUsername(), user.getEmail(), user.getRole().name(), user.getVerificationCode()
@@ -68,7 +75,7 @@ public class AuthServiceImpl implements AuthenticationService {
     @Override
     public ApiResponse<String> verifyUser(VerifyRequest request) {
         var user = repository.findByEmail(request.email()).orElseThrow(() ->
-                new EntityNotFoundException("User with email " + request.email() + " not found")
+                new ResourceNotFoundException("User with email " + request.email() + " not found")
         );
 
         if (user.isEnabled()) throw new ConflictException("Account already verified");
@@ -92,7 +99,7 @@ public class AuthServiceImpl implements AuthenticationService {
     @Override
     public ApiResponse<LoginResponse> login(LoginRequest request) {
         var user = repository.findByEmail(request.email()).orElseThrow(() ->
-                new EntityNotFoundException("User not found")
+                new ResourceNotFoundException("User not found")
         );
 
         if (!user.isEnabled()) throw new UnAuthorizedException("Email not verified");
@@ -118,7 +125,7 @@ public class AuthServiceImpl implements AuthenticationService {
     @Override
     public ApiResponse<String> resendVerificationCode(ResendVerificationCodeRequest request) throws MessagingException {
         var user = repository.findByEmail(request.email()).orElseThrow(() ->
-                new EntityNotFoundException("User with email " + request.email() + " not found")
+                new ResourceNotFoundException("User with email " + request.email() + " not found")
         );
 
         if (user.isEnabled()) throw new BadCredentialsException("User already verified");
@@ -128,15 +135,18 @@ public class AuthServiceImpl implements AuthenticationService {
 
         repository.save(user);
 
+        AuthConfirmation confirmation = new AuthConfirmation(
+                user.getEmail(), user.getVerificationCode()
+        );
         //send email
-        emailService.sendEmailVerificationCode(user.getEmail(), user.getVerificationCode());
+        authProducer.sendVerificationCode(confirmation);
         return onSuccess("Verification code sent successfully", user.getVerificationCode());
     }
 
     @Override
     public ApiResponse<String> resetPassword(ResetPasswordRequest request) {
         var user = repository.findByEmail(request.email()).orElseThrow(() ->
-                new EntityNotFoundException("User with " + request.email() + " not found")
+                new ResourceNotFoundException("User with " + request.email() + " not found")
         );
 
         var isPasswordValid = passwordEncoder.matches(request.initialPassword(), user.getPassword());
@@ -149,6 +159,24 @@ public class AuthServiceImpl implements AuthenticationService {
 
         repository.save(user);
         return onSuccess("Password reset successful", null);
+    }
+
+    @Override
+    public ApiResponse<UserResponse> getUserById(Long userId) {
+        UserEntity user = repository.findById(userId).orElseThrow(() ->
+                new ResourceNotFoundException("User with id " + userId + " not found")
+        );
+
+        UserResponse response = new UserResponse(
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole().name()
+        );
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "User retrieved successfully",
+                response
+        );
     }
 
     private String generateVerificationCode() {

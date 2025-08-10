@@ -9,6 +9,10 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+
   mail:
     host: localhost
     port: 1025
