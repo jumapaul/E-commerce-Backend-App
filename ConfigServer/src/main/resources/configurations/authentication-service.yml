@@ -1,23 +1,30 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/e-commerce-users
-    username: postgres
-    password: postgres
-
+    url: ${databaseUrl}
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
   kafka:
     producer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: ${bootStrapServers}
+    security:
+      protocol: SASL_SSL
+    sasl:
+      mechanism: PLAIN
+      jaas:
+        config: ${jaasConfig}
+      #      bootstrap-servers: localhost:9092
+
 
   mail:
-    host: localhost
-    port: 1025
-    username: juma
-    password: juma
+    host: smtp.mailersend.net
+#    host: localhost
+    port: 587
+    access_token: ${mailAccessToken}
+    from_mail: noreply@test-ywj2lpndeqqg7oqz.mlsender.net
+    username: ${mailUsername}
+    password: ${mailPassword}
     properties:
       mail:
         smtp:
@@ -31,7 +38,7 @@ spring:
 
 security:
   jwt:
-    secret-key: ad8180ed7aebdbe4941e46dfafef1370e016bdcba06e438ff744bf858b31bbb346f94ec4f0c0b859f7443ac3da696fefd913ce4edb1018ec00382619c73f5f99
+    secret-key: ${jwtSecretKey}
     expiration-time: 7200000
 server:
   port: 8010
