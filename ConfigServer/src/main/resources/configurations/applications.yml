@@ -3,10 +3,8 @@ spring:
     config:
       override-system-properties: false
 eureka:
-  instance:
-    hostname: localhost
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: https://discovery-service-qfs9.onrender.com
 logging:
   config: classpath:logback-spring.xml
