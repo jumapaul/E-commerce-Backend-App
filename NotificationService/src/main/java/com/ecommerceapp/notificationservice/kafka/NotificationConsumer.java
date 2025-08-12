@@ -19,6 +19,7 @@ public class NotificationConsumer {
     private final NotificationRepository repository;
     private final EmailService emailService;
 
+    // Kafka Consumer
     @KafkaListener(topics = "order-topic", groupId = "orderGroup")
     public void consumeOrderConfirmation(OrderConfirmation orderConfirmation) throws MessagingException {
         log.info("=====>consuming the message from order: {}", orderConfirmation);

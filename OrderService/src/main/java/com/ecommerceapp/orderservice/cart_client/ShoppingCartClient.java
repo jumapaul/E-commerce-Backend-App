@@ -15,6 +15,7 @@ import java.util.Optional;
         configuration = FeignClientConfiguration.class
 )
 public interface ShoppingCartClient {
+    //External requests
 
     @GetMapping("/{userId}")
     Optional<ApiResponse<ShoppingCartResponse>> getCart(

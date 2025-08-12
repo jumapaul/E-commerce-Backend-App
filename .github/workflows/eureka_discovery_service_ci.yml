@@ -1,0 +1,44 @@
+name: Build, test and deploy Eureka service to docker hub
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'EurekaDiscoveryService/**'
+
+env:
+  GIT_SHA: ${{ github.sha }}
+
+jobs:
+  build:
+    name: Build and test Eureka Discovery Service
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EurekaDiscoveryService
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Make gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Build and run test
+        run: ./gradlew clean build -x test
+
+      - name: Log in to docker hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/discovery_service:$GIT_SHA .
+
+      - name: Push docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/discovery_service:$GIT_SHA

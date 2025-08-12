@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 @Component
 public class RouteValidator {
 
+    //Endpoints that do not require authentications
     public static final List<String> openEndPoints = List.of(
             "/api/v1/auth/**",
             "/eureka"

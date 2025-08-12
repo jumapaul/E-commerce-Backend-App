@@ -14,6 +14,8 @@ import java.util.Optional;
 )
 public interface ProductClient {
 
+    //Making external requests
+
     @GetMapping("/{productId}")
     Optional<ProductResponse> getProductById(
             @PathVariable(name = "productId") String productId,

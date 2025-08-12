@@ -15,11 +15,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Products {
 
     @Id
-    String productId;
-    String productName;
-    String productDescription;
-    int availableQuantity;
-    String itemImageUrl;
-    double itemPrice;
-    String productCategory;
+    private String productId;
+    private String productName;
+    private String productDescription;
+    private int availableQuantity;
+    private String itemImageUrl;
+    private double itemPrice;
+    private String productCategory;
 }
