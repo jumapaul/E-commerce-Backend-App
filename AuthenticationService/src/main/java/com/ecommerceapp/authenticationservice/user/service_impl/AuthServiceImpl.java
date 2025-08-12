@@ -14,7 +14,6 @@ import com.ecommerceapp.authenticationservice.user.response.RegisterResponse;
 import com.ecommerceapp.authenticationservice.user.services.AuthenticationService;
 import com.ecommerceapp.authenticationservice.exception.ConflictException;
 import com.ecommerceapp.authenticationservice.exception.UnAuthorizedException;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +41,7 @@ public class AuthServiceImpl implements AuthenticationService {
     private final AuthProducer authProducer;
 
     @Override
-    public ApiResponse<RegisterResponse> register(@Valid RegisterRequest request) throws MessagingException {
+    public ApiResponse<RegisterResponse> register(@Valid RegisterRequest request) {
         var userExists = repository.findByEmail(request.email()).isPresent();
 
         if (userExists) throw new ConflictException("User already exists");
@@ -123,7 +122,7 @@ public class AuthServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ApiResponse<String> resendVerificationCode(ResendVerificationCodeRequest request) throws MessagingException {
+    public ApiResponse<String> resendVerificationCode(ResendVerificationCodeRequest request) {
         var user = repository.findByEmail(request.email()).orElseThrow(() ->
                 new ResourceNotFoundException("User with email " + request.email() + " not found")
         );

@@ -3,3 +3,5 @@ spring:
     name: authentication-service
   config:
     import: optional:configserver:http://localhost:8000
+  profiles:
+    active: dev

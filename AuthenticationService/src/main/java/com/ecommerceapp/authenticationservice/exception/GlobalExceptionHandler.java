@@ -1,7 +1,6 @@
 package com.ecommerceapp.authenticationservice.exception;
 
 import com.ecommerceapp.authenticationservice.user.response.ApiResponse;
-import jakarta.mail.MessagingException;
 import jakarta.ws.rs.ForbiddenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +30,14 @@ public class GlobalExceptionHandler {
         ), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(MessagingException.class)
-    public ResponseEntity<Object> handleMessagingException(MessagingException exception) {
-        return new ResponseEntity<>(new ApiResponse<>(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                exception.getMessage(),
-                null
-        ), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(MessagingException.class)
+//    public ResponseEntity<Object> handleMessagingException(MessagingException exception) {
+//        return new ResponseEntity<>(new ApiResponse<>(
+//                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+//                exception.getMessage(),
+//                null
+//        ), HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception) {

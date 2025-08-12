@@ -7,7 +7,6 @@ import com.ecommerceapp.authenticationservice.user.response.ApiResponse;
 import com.ecommerceapp.authenticationservice.user.response.LoginResponse;
 import com.ecommerceapp.authenticationservice.user.response.RegisterResponse;
 import com.ecommerceapp.authenticationservice.user.services.AuthenticationService;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<RegisterResponse>> registerUser(
             @RequestBody @Valid RegisterRequest request
-    ) throws MessagingException {
+    ) {
         return ResponseEntity.ok(authService.register(request));
     }
 
@@ -38,7 +37,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/resendVerificationCode")
-    public ResponseEntity<ApiResponse<String>> resendVerificationCode(@RequestBody ResendVerificationCodeRequest request) throws MessagingException {
+    public ResponseEntity<ApiResponse<String>> resendVerificationCode(@RequestBody ResendVerificationCodeRequest request) {
         return ResponseEntity.ok(authService.resendVerificationCode(request));
     }
 

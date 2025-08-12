@@ -1,0 +1,42 @@
+spring:
+  profiles:
+    active: test
+  cloud:
+    config:
+      enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/e-commerce-users
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+
+  mail:
+    host: localhost
+    port: 1025
+    username: juma
+    password: juma
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+
+security:
+  jwt:
+    secret-key: e9cddb5db6c1ef9a6a5d4b4677ef1d6c6fff514fdf3fd23b9099d754b0c42b03b7560d34cd4a78620cf619e6bee5a3926b803e737153667c856081bb90d145fa
+    expiration-time: 7200000
+server:
+  port: 8010

@@ -2,7 +2,6 @@ package com.ecommerceapp.authenticationservice.kafka.consumer;
 
 import com.ecommerceapp.authenticationservice.email.EmailService;
 import com.ecommerceapp.authenticationservice.kafka.AuthConfirmation;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,10 +14,14 @@ public class AuthConsumer {
 
     private final EmailService emailService;
 
-    @KafkaListener(topics = "auth-topic", groupId = "authGroup")
-    public void consumeAuthConfirmation(AuthConfirmation confirmation) throws MessagingException {
+    @KafkaListener(topics = "auth-topic", groupId = "java-group-1")
+    public void consumeAuthConfirmation(AuthConfirmation confirmation) {
         log.info("==========>consuming the auth message: {}", confirmation);
 
-        emailService.sendEmailVerificationCode(confirmation.email(), confirmation.code());
+        try {
+            emailService.sendEmailVerificationCode(confirmation.email(), confirmation.code());
+        } catch (Exception e) {
+            log.info("================>exception: {}", e.getMessage());
+        }
     }
 }
