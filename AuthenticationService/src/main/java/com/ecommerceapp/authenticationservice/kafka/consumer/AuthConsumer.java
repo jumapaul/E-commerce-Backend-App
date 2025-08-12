@@ -16,6 +16,7 @@ public class AuthConsumer {
 
     @KafkaListener(topics = "auth-topic", groupId = "java-group-1")
     public void consumeAuthConfirmation(AuthConfirmation confirmation) {
+        log.info("=============> consuming the authentication");
         try {
             emailService.sendEmailVerificationCode(confirmation.email(), confirmation.code());
         } catch (Exception e) {
