@@ -3,7 +3,7 @@ on:
   push:
     branches: [master]
     paths:
-      - 'ChatService'
+      - 'ChatService/**'
 
 env:
   GIT_SHA: ${{ github.sha }}
