@@ -42,16 +42,17 @@ This repository contains the backend implementation for a scalable ecommerce app
 4. **Shopping Cart Service**: Manages users' shopping carts, including adding/removing items.
 5. **Notification Service**: Sends email and SMS notifications to users.
 7. **ChatService**: Manages conversation between customers and sellers.
+8. **Delivery service**: Manages delivery with real-time tracking using GPS.
 
 ## Additional Components:
-In addition to the core microservices, the following components was included to enhance the scalability, reliability, and manageability of the e-commerce platform:
+In addition to the core microservices, the following components were included to enhance the scalability, reliability, and manageability of the e-commerce platform:
 
-1. **API Gateway**: Serves as the entry point for all client requests, routing them to the appropriate microservice. Used spring cloud gateway for this purpose.
-2. **Service Discovery**: Automatically detects and manages service instances. I Used Eureka for this purpose.
+1. **API Gateway**: Serves as the entry point for all client requests, routing them to the appropriate microservice. Used Spring Cloud Gateway for this purpose.
+2. **Service Discovery**: Automatically detects and manages service instances. I used Eureka for this purpose.
 3. **Centralized Logging**: Aggregates logs from all microservices for easy monitoring and debugging. Used the ELK stack (Elasticsearch, Logstash, Kibana) for this purpose.
-4. **Docker & Docker Compose**: Containerize each microservice and manages their orchestration, networking, and scaling. Docker Compose can be used to define and manage multi-container applications.
+4. **Docker & Docker Compose**: Containerize each microservice and manage their orchestration, networking, and scaling. Docker Compose can be used to define and manage multi-container applications.
 5. **CI/CD Pipeline**: Automates the build, test, and deployment process of each microservice. Used GitHub Actions for this purpose.
-6. **Caching**: Caching data for the most made request to minimize database query and improving efficiency. Redis is used for this purpose.
+6. **Caching**: Caching data for the most made request to minimise database queries and improve efficiency. Redis is used for this purpose.
 
 ## Architecture
 
@@ -67,8 +68,13 @@ The application follows a microservices architecture, with each service running 
    ```bash
    git clone git@github.com:jumapaul/E-commerce-Backend-App.git
    cd E-commerce-Backend-App
-
-This project is an implementation of idea taken through Roadmap.sh
+   ```
+2. **Variables addition**
+- Add the necessary environment variables to Docker Compose and the various service configurations in the config server, and run.
+```bash
+docker compose up -d
+```
+This project is an implementation of an idea taken from Roadmap.sh
 https://roadmap.sh/projects/scalable-ecommerce-platform
 
 
