@@ -5,6 +5,6 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: https://discovery-service-qfs9.onrender.com
+      defaultZone: http://localhost:8761
 logging:
   config: classpath:logback-spring.xml

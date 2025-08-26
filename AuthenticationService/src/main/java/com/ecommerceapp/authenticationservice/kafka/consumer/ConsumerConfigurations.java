@@ -28,8 +28,8 @@ public class ConsumerConfigurations {
     @Value("${spring.kafka.sasl.mechanism:PLAIN}")
     private String saslMechanism;
 
-    @Value("${spring.kafka.sasl.jaas.config:}")
-    private String jaasConfig;
+//    @Value("${spring.kafka.sasl.jaas.config:}")
+//    private String jaasConfig;
 
     @Bean
     public ConsumerFactory<String, AuthConfirmation> consumerFactory() {
@@ -38,14 +38,14 @@ public class ConsumerConfigurations {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "java-group-1");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "authGroup");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-        if (!"PLAINTEXT".equals(securityProtocol)) {
-            props.put("security.protocol", securityProtocol);
-            props.put("sasl.mechanism", saslMechanism);
-            props.put("sasl.jaas.config", jaasConfig);
-        }
+//        if (!"PLAINTEXT".equals(securityProtocol)) {
+//            props.put("security.protocol", securityProtocol);
+//            props.put("sasl.mechanism", saslMechanism);
+//            props.put("sasl.jaas.config", jaasConfig);
+//        }
 
         props.put(JsonDeserializer.REMOVE_TYPE_INFO_HEADERS, true);
         props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, AuthConfirmation.class.getName());

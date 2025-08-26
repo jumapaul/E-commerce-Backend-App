@@ -13,9 +13,7 @@ import java.util.Optional;
         url = "${application.config.product-url}"
 )
 public interface ProductClient {
-
-    //Making external requests
-
+    
     @GetMapping("/{productId}")
     Optional<ProductResponse> getProductById(
             @PathVariable(name = "productId") String productId,

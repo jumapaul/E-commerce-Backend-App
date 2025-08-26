@@ -26,6 +26,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGenericExceptions(Exception exception) {
+        System.out.println("========>Generic exception caught: " + exception.getMessage());
+
         return new ResponseEntity<>(new ApiResponse<>(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 exception.getMessage(),

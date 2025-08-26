@@ -14,7 +14,7 @@ public class AuthConsumer {
 
     private final EmailService emailService;
 
-    @KafkaListener(topics = "auth-topic", groupId = "java-group-1")
+    @KafkaListener(topics = "auth-topic", groupId = "authGroup")
     public void consumeAuthConfirmation(AuthConfirmation confirmation) {
 
         try {

@@ -26,8 +26,8 @@ public class KafkaProducerConfig {
     @Value("${spring.kafka.sasl.mechanism:PLAIN}")
     private String saslMechanism;
 
-    @Value("${spring.kafka.sasl.jaas.config:}")
-    private String jaasConfig;
+//    @Value("${spring.kafka.sasl.jaas.config:}")
+//    private String jaasConfig;
 
     @Bean
     public ProducerFactory<String, AuthConfirmation> producerFactory() {
@@ -37,11 +37,11 @@ public class KafkaProducerConfig {
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
-        if (!"PLAINTEXT".equals(securityProtocol)) {
-            configProps.put("security.protocol", securityProtocol);
-            configProps.put("sasl.mechanism", saslMechanism);
-            configProps.put("sasl.jaas.config", jaasConfig);
-        }
+//        if (!"PLAINTEXT".equals(securityProtocol)) {
+//            configProps.put("security.protocol", securityProtocol);
+//            configProps.put("sasl.mechanism", saslMechanism);
+//            configProps.put("sasl.jaas.config", jaasConfig);
+//        }
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 

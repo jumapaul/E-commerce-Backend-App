@@ -1,30 +1,34 @@
 spring:
   datasource:
-    url: ${databaseUrl}
+    url: jdbc:postgresql://localhost:5432/e-commerce-users
+    username: postgres
+    password: postgres
+#    url: ${databaseUrl}
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
     producer:
-      bootstrap-servers: ${bootStrapServers}
-    security:
-      protocol: SASL_SSL
-    sasl:
-      mechanism: PLAIN
-      jaas:
-        config: ${jaasConfig}
+      bootstrap-servers: localhost:9092
+#    security:
+#      protocol: SASL_SSL
+#    sasl:
+#      mechanism: PLAIN
+#      jaas:
+#        config: ${jaasConfig}
       #      bootstrap-servers: localhost:9092
 
 
   mail:
-    host: smtp.mailersend.net
-#    host: localhost
-    port: 587
-    access_token: ${mailAccessToken}
-    from_mail: noreply@test-ywj2lpndeqqg7oqz.mlsender.net
-    username: ${mailUsername}
-    password: ${mailPassword}
+#    host: smtp.mailersend.net
+    host: localhost
+    port: 1025
+#    access_token: ${mailAccessToken}
+#    from_mail: noreply@test-ywj2lpndeqqg7oqz.mlsender.net
+    from_mail: noreply@gmail.com
+    username: juma
+    password: juma
     properties:
       mail:
         smtp:
@@ -35,6 +39,12 @@ spring:
         connectiontimeout: 5000
         timeout: 3000
         writetimeout: 5000
+
+  redis:
+    host: localhost
+    port: 6379
+  cache:
+    type: redis
 
 security:
   jwt:
