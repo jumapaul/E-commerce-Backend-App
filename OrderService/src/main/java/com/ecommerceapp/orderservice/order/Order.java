@@ -19,10 +19,12 @@ import java.util.List;
 public class Order {
     @Id
     private String id;
-    private Status status;
+    private OrderStatus orderStatus;
+    private PaymentStatus paymentStatus;
     private Long userId;
     private String userEmail;
     private String username;
+    private String phoneNumber;
     private BigDecimal totalPrice;
     private List<CartItem> cartItems;
 }

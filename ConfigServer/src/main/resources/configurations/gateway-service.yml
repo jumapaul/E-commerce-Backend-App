@@ -9,8 +9,8 @@ spring:
           uri: lb:http://AUTHENTICATION-SERVICE
           predicates:
             - Path=/api/v1/auth/**
-#          filters:
-#            - AuthenticationFilter
+        #          filters:
+        #            - AuthenticationFilter
 
         - id: auth-service-user
           uri: lb:http://AUTHENTICATION-SERVICE
@@ -42,6 +42,13 @@ spring:
           uri: lb:http://CHAT-SERVICE
           predicates:
             - Path=/api/v1/chat/**
+
+        - id: payment-service
+          uri: lb:http://PAYMENT-SERVICE
+          predicates:
+            - Path=/api/v1/payment/**
+          filters:
+            - AuthenticationFilter
 server:
   port: 8222
 

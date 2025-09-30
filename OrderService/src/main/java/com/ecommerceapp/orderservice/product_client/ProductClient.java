@@ -13,13 +13,11 @@ public interface ProductClient {
 
     @GetMapping("/{productId}")
     ProductResponse getProductById(
-            @PathVariable(name = "productId") String productId,
-            @RequestHeader("Authorization") String authHeader
+            @PathVariable(name = "productId") String productId
     );
 
     @PutMapping
     void updateProduct(
-            @RequestBody ProductRequest request,
-            @RequestHeader("Authorization") String authHeader
+            @RequestBody ProductRequest request
     );
 }

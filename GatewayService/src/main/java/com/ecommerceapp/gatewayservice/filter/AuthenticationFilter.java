@@ -32,9 +32,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             ServerHttpRequest request = exchange.getRequest();
 
             if (validator.isSecure.test(request)) {
-                if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                    throw new BadRequestException(HttpStatus.BAD_REQUEST);
-                }
+//                if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+//                    throw new BadRequestException(HttpStatus.BAD_REQUEST);
+//                }
 
                 String authHeader = Objects.requireNonNull(exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION)).get(0);
 

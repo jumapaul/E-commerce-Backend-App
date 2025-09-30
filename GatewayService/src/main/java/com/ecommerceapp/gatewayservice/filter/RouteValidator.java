@@ -2,6 +2,7 @@ package com.ecommerceapp.gatewayservice.filter;
 
 import org.springframework.stereotype.Component;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -11,7 +12,8 @@ public class RouteValidator {
     //Endpoints that do not require authentications
     public static final List<String> openEndPoints = List.of(
             "/api/v1/auth/**",
-            "/eureka"
+            "/eureka",
+            "/api/v1/payment/transaction-result"
     );
 
     public Predicate<ServerHttpRequest> isSecure =

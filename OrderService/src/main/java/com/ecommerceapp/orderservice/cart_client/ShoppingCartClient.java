@@ -3,10 +3,8 @@ package com.ecommerceapp.orderservice.cart_client;
 import com.ecommerceapp.orderservice.feign.FeignClientConfiguration;
 import com.ecommerceapp.orderservice.order.ApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Optional;
 
 @FeignClient(
@@ -16,16 +14,18 @@ import java.util.Optional;
 )
 public interface ShoppingCartClient {
     //External requests
-
     @GetMapping("/{userId}")
     Optional<ApiResponse<ShoppingCartResponse>> getCart(
-            @PathVariable(name = "userId") Long userId,
-            @RequestHeader("Authorization") String authHeader
+            @PathVariable(name = "userId") Long userId
     );
 
-    @DeleteMapping("delete/{userId}")
-    ApiResponse<String> deleteCart(
-            @PathVariable(name = "userId") Long userId,
-            @RequestHeader("Authorization") String authHeader
+    @PostMapping("/{userId}")
+    ApiResponse<Cart> addToCart(
+            @RequestBody CartItem request,
+            @PathVariable Long userId);
+
+    @DeleteMapping("/clear/{userId}")
+    ApiResponse<String> clearCart(
+            @PathVariable(name = "userId") Long userId
     );
 }

@@ -1,0 +1,40 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/e-commerce-payments
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  cloud:
+    function:
+      definition: paymentProcessor;paymentSupplier
+    stream:
+      bindings:
+        paymentProcessor-in-0:
+          destination: order-event
+        paymentSupplier-out-0:
+          destination: payment-event
+
+#  cloud:
+#    stream:
+#      function:
+#        definition: paymentProcessor;paymentSupplier
+#      bindings:
+#        paymentProcessor-in-0:
+#          destination: order-event
+#        paymentProcessor-out-0:
+#          destination: payment-event
+mpesa:
+  daraja:
+    consumer-key: SQErklliokkfnI4XleUZKDl1r0f5iTaNanOtq3KEZbF4XF2z
+    consumer-secret: ljyGQtkAVY6rAb7z2xFHHSkIsUGCaPi6GhGAx3rewmgFXGio8OmzofYS93bJDwkd
+    grant-type: client_credentials
+    callback-url: https://b725547b860b.ngrok-free.app/api/v1/payment/transaction-result
+    short-code: 174379
+    passkey: bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919

@@ -7,7 +7,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.util.HashMap;
 
 @RestControllerAdvice
@@ -15,7 +14,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleNotFoundException(ResourceNotFoundException ex) {
-        System.out.println("========>ProductNotFoundException caught: " + ex.getMessage());
         return new ResponseEntity<>(new ApiResponse<>(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),
@@ -23,20 +21,16 @@ public class GlobalExceptionHandler {
         ), HttpStatus.NOT_FOUND);
     }
 
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGenericExceptions(Exception exception) {
-        System.out.println("========>Generic exception caught: " + exception.getMessage());
-
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Object> handleBadRequestException(BadRequestException ex) {
         return new ResponseEntity<>(new ApiResponse<>(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                exception.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
                 null
-        ), HttpStatus.INTERNAL_SERVER_ERROR);
+        ), HttpStatus.NOT_FOUND);
     }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleBadRequest(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Object> handleInvalidArguments(MethodArgumentNotValidException ex) {
         var errors = new HashMap<>();
 
         ex.getBindingResult().getAllErrors()

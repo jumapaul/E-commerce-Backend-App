@@ -8,6 +8,7 @@ import feign.codec.ErrorDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+
 import java.nio.charset.StandardCharsets;
 
 public class CustomFeignDecoder implements ErrorDecoder {
@@ -20,6 +21,7 @@ public class CustomFeignDecoder implements ErrorDecoder {
         String responseBody = extractResponseBody(response);
 
         logger.error("Feign client error. Method: {}, status: {}, Body: {}", methodKey, status, responseBody);
+        logger.error("================> Error: {}, {} ", response.body(), response.headers());
 
         return switch (status) {
             case BAD_REQUEST -> new IllegalArgumentException("Invalid request: " + responseBody);

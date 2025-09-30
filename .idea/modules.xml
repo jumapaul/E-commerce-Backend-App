@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/E-commerce-app.iml" filepath="$PROJECT_DIR$/.idea/E-commerce-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/NotificationService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/NotificationService.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/OrderService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/OrderService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PaymentService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/PaymentService.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ProductCatalogService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ProductCatalogService.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ShoppingCartService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ShoppingCartService.main.iml" />
     </modules>

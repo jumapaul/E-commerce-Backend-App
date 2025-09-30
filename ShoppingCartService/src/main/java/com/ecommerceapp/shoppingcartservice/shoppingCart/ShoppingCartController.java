@@ -2,6 +2,7 @@ package com.ecommerceapp.shoppingcartservice.shoppingCart;
 
 import com.ecommerceapp.shoppingcartservice.shoppingCart.cart.Cart;
 import com.ecommerceapp.shoppingcartservice.shoppingCart.cart.CartItem;
+import com.ecommerceapp.shoppingcartservice.shoppingCart.cart.CartItemRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,10 @@ public class ShoppingCartController {
 
     @PostMapping("/{userId}")
     public ResponseEntity<ApiResponse<Cart>> addToCart(
-            @RequestBody CartItem cartItem,
-            @PathVariable Long userId,
-            @RequestHeader("Authorization") String authHeader
+            @RequestBody CartItemRequest request,
+            @PathVariable Long userId
     ) {
-        return ResponseEntity.ok(service.addProductToCart(cartItem, userId, authHeader));
+        return ResponseEntity.ok(service.addProductToCart(request, userId));
     }
 
     @GetMapping("{userId}")
@@ -35,10 +35,10 @@ public class ShoppingCartController {
         return ResponseEntity.ok(service.removeFromCart(userId, itemId));
     }
 
-    @DeleteMapping("delete/{userId}")
-    public ResponseEntity<ApiResponse<String>> deleteCart(
+    @DeleteMapping("/clear/{userId}")
+    public ResponseEntity<ApiResponse<String>> clearCart(
             @PathVariable(name = "userId") Long userId
     ) {
-        return ResponseEntity.ok(service.deleteCart(userId));
+        return ResponseEntity.ok(service.clearCart(userId));
     }
 }

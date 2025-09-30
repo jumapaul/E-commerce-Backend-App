@@ -63,4 +63,13 @@ public class GlobalExceptionHandler {
                 null
         ), HttpStatus.SERVICE_UNAVAILABLE);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    ResponseEntity<Object> handleBadRequestException(BadRequestException exception) {
+        return new ResponseEntity<>(new ApiResponse<>(
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                null
+        ), HttpStatus.BAD_REQUEST);
+    }
 }

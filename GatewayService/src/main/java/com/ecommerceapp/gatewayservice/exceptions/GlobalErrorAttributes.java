@@ -23,9 +23,6 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
             case UNAUTHORIZED:
                 errorResponse.put("message", "Invalid token");
                 break;
-            case BAD_REQUEST:
-                errorResponse.put("message", "No headers added");
-                break;
             case FORBIDDEN:
                 errorResponse.put("message", "Forbidden request");
                 break;
@@ -35,9 +32,9 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
             case NOT_FOUND:
                 errorResponse.put("message", "Not found");
                 break;
-            default:
-                errorResponse.put("message", "Something went wrong");
-                break;
+//            default:
+//                errorResponse.put("message", "Something went wrong");
+//                break;
         }
 
         return errorResponse;

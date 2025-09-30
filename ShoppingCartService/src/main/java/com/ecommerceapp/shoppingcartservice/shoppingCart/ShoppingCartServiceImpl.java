@@ -5,14 +5,12 @@ import com.ecommerceapp.shoppingcartservice.shoppingCart.exception.ResourceNotFo
 import com.ecommerceapp.shoppingcartservice.shoppingCart.productClient.ProductClient;
 import com.ecommerceapp.shoppingcartservice.shoppingCart.productClient.ProductResponse;
 import com.ecommerceapp.shoppingcartservice.shoppingCart.user_client.UserClient;
-import com.ecommerceapp.shoppingcartservice.shoppingCart.user_client.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -25,22 +23,22 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartMapper mapper;
 
     @Override
-    public ApiResponse<Cart> addProductToCart(CartItem request, Long userId, String authHeader) {
+    public ApiResponse<Cart> addProductToCart(CartItemRequest request, Long userId) {
 
-        Cart cart = repository.findById(userId).orElseGet(() ->
-                createNewCart(userId, authHeader)
+        Cart cart = repository.findById(userId).orElseThrow(() ->
+                new ResourceNotFoundException("Cart not found")
         );
 
         Optional<CartItem> cartItem = cart.getCartItems().stream().filter(item ->
-                item.getProductId().equals(request.getProductId())).findFirst();
+                item.getProductId().equals(request.productId())).findFirst();
 
-        ProductResponse product = productClient.getProductById(request.getProductId(), authHeader).orElseThrow(() ->
-                new ResourceNotFoundException("Item with id " + request.getProductId() + "not found")
+        ProductResponse product = productClient.getProductById(request.productId()).orElseThrow(() ->
+                new ResourceNotFoundException("Item with productId " + request.productId() + "not found")
         );
 
         if (cartItem.isPresent()) {
             CartItem item = cartItem.get();
-            int newQuantity = item.getQuantity() + request.getQuantity();
+            int newQuantity = item.getQuantity() + request.quantity();
 
 
             if (newQuantity > product.data().availableQuantity())
@@ -51,11 +49,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             item.setTotalPrice(newTotalPrice);
 
         } else {
-            if (request.getQuantity() > product.data().availableQuantity())
+            if (request.quantity() > product.data().availableQuantity())
                 throw new IllegalArgumentException("Item out of stock");
 
 
-            cart.getCartItems().add(mapper.fromProductResponse(product.data(), request.getQuantity()));
+            cart.getCartItems().add(mapper.fromProductResponse(product.data(), request.quantity()));
         }
 
         BigDecimal totalPrice = cart.getCartItems().stream()
@@ -109,23 +107,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ApiResponse<String> deleteCart(Long userId) {
-        repository.deleteById(userId);
-        return null;
-    }
-
-    private Cart createNewCart(Long userId, String authHeader) {
-        ApiResponse<UserResponse> user = userClient.getUserById(userId, authHeader).orElseThrow(() ->
-                new ResourceNotFoundException("User with id " + userId + " not found")
+    public ApiResponse<String> clearCart(Long userId) {
+        Cart cart = repository.findById(userId).orElseThrow(() ->
+                new ResourceNotFoundException("Cart not found")
         );
-        Cart newCart = Cart.builder()
-                .userId(userId)
-                .username(user.getData().username())
-                .userEmail(user.getData().email())
-                .totalPrice(BigDecimal.ZERO)
-                .cartItems(new ArrayList<>())
-                .build();
 
-        return repository.save(newCart);
+        cart.getCartItems().clear();
+        cart.setTotalPrice(BigDecimal.ZERO);
+        repository.save(cart);
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Cart successfully cleared",
+                null
+        );
     }
 }

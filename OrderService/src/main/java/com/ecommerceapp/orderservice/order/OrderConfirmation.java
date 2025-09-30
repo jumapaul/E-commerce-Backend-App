@@ -7,7 +7,7 @@ import java.util.List;
 
 public record OrderConfirmation(
         String id,
-        Status status,
+        OrderStatus orderStatus,
         String userEmail,
         BigDecimal totalPrice,
         List<CartItem>cartItems

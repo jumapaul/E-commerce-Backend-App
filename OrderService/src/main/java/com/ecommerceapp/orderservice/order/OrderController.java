@@ -1,5 +1,6 @@
 package com.ecommerceapp.orderservice.order;
 
+import com.ecommerceapp.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +14,12 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/{userId}")
+    @PostMapping("/{userId}")
     public ResponseEntity<Order> makeOrder(
             @PathVariable(name = "userId") Long userId,
-            @RequestHeader("Authorization") String authHeader
+            @RequestBody OrderRequestDto orderRequest
     ) {
-        return ResponseEntity.ok(orderService.makeOrder(userId, authHeader));
+        return ResponseEntity.ok(orderService.makeOrder(userId, orderRequest));
     }
 
     @GetMapping
@@ -53,4 +54,12 @@ public class OrderController {
     public ResponseEntity<Order> getOrderById(@PathVariable(name = "orderId") String orderId) {
         return ResponseEntity.ok(orderService.findOrderById(orderId));
     }
+
+    @GetMapping("/cancel/{orderId}")
+    public ResponseEntity<ApiResponse<String>> cancelOrder(
+            @PathVariable(name = "orderId") String orderId
+    ) {
+        return ResponseEntity.ok(orderService.cancelOrder(orderId));
+    }
+
 }

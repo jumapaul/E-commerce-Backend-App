@@ -12,10 +12,21 @@ spring:
     producer:
       bootstrap-servers: localhost:9092
 
+  cloud:
+    function:
+      definition: orderSupplier;paymentEventConsumer
+    stream:
+      bindings:
+        orderSupplier-out-0:
+          destination: order-event
+        paymentEventConsumer-in-0:
+          destination: payment-event
+
 server:
   port: 8040
 
 application:
   config:
-    shopping-cart-url: http://localhost:8222/api/v1/cart
-    product-url: http://localhost:8222/api/v1/products
+    shopping-cart-url: http://localhost:8030/api/v1/cart
+    product-url: http://localhost:8020/api/v1/products
+    payment-url:  http://localhost:8090/api/v1/payment

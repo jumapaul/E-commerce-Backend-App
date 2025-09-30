@@ -33,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cacheable(value = "products")
+//    @Cacheable(value = "products")
     public ApiResponse<List<ProductResponse>> getAllProducts() {
         try {
             var data = repository.findAll().stream().map(mappers::fromProduct).toList();
@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cacheable(value = "singleProduct", key = "#productId")
+//    @Cacheable(value = "singleProduct", key = "#productId")
     public ApiResponse<ProductResponse> getProductById(String productId) {
         try {
             var data = repository.findById(productId).orElseThrow(() ->
@@ -62,7 +62,6 @@ public class ProductServiceImpl implements ProductService {
                     mappers.fromProduct(data)
             );
         } catch (Exception e) {
-            log.info("============>: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }

@@ -16,6 +16,5 @@ public interface ProductClient {
     
     @GetMapping("/{productId}")
     Optional<ProductResponse> getProductById(
-            @PathVariable(name = "productId") String productId,
-            @RequestHeader("Authorization") String authHeader);
+            @PathVariable(name = "productId") String productId);
 }
