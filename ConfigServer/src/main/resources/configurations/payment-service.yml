@@ -32,9 +32,9 @@ spring:
 #          destination: payment-event
 mpesa:
   daraja:
-    consumer-key: SQErklliokkfnI4XleUZKDl1r0f5iTaNanOtq3KEZbF4XF2z
-    consumer-secret: ljyGQtkAVY6rAb7z2xFHHSkIsUGCaPi6GhGAx3rewmgFXGio8OmzofYS93bJDwkd
+    consumer-key: ${consumerKey}
+    consumer-secret: ${consumerSecret}
     grant-type: client_credentials
     callback-url: https://b725547b860b.ngrok-free.app/api/v1/payment/transaction-result
     short-code: 174379
-    passkey: bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919
+    passkey: ${passKey}
